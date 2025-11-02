@@ -29,35 +29,6 @@ def compute_spacy_doc_vectors(df, text_col="text", save_path="../data/embeddings
     return doc_vectors
 
 
-def build_or_load_faiss_index(df,text_col, index_path,doc_vectors_path,):
-    """
-    Build or load a FAISS index with spaCy embeddings.
-    Returns: FAISS index and document vectors.
-    """
-    os.makedirs(os.path.dirname(index_path), exist_ok=True)
-
-    # Load or compute document vectors
-    doc_vectors = compute_spacy_doc_vectors(df, text_col=text_col, save_path=doc_vectors_path)
-
-    # Load index if exists
-    if os.path.exists(index_path):
-        logger.info(f"Loading existing FAISS index from {index_path}")
-        index = faiss.read_index(index_path)
-        return index, doc_vectors
-
-    # Build new FAISS index
-    logger.info("Building new FAISS index...")
-    doc_vectors = doc_vectors.astype("float32")
-    faiss.normalize_L2(doc_vectors)
-    index = faiss.IndexFlatIP(doc_vectors.shape[1])
-    index.add(doc_vectors)
-
-    # Save index
-    faiss.write_index(index, index_path)
-    logger.info(f"FAISS index built and saved to {index_path}")
-
-    return index, doc_vectors
-
 
 def search_articles_spacy(query, df, index, top_n=5):
     """
