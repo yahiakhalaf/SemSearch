@@ -28,9 +28,10 @@ def get_yake_keywords_from_text(text, top_n=None):
     kw_extractor = yake.KeywordExtractor(
         lan="en",
         n=3,                      # Extract up to 3-word phrases
-        dedupLim=0.9,             # High deduplication threshold
+        dedupLim=0.2,             # High deduplication threshold
         dedupFunc="seqm",
-        windowsSize=1,
+        windowsSize=3,
+        use_stemmer=True,
         top=top_n,
         features=None
     )

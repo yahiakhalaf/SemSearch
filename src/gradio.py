@@ -1,7 +1,12 @@
+# gradio.py
 import gradio as gr
 import pandas as pd
+import os
 from src.logger_config import setup_logger
-from src.hot_keywords import get_yake_keywords_from_text, get_keybert_keywords_from_text
+from src.hot_keywords import (
+    extract_hot_keywords_yake,
+    extract_hot_keywords_keybert
+)
 from src.lexical_search import build_bm25, search_articles_bm25
 from src.semantic_search import compute_transformer_doc_vectors, search_articles_semantic
 from src.spacy_search import compute_spacy_doc_vectors, search_articles_spacy
@@ -20,45 +25,79 @@ SPACY_EMBEDDINGS_PATH = config['models']['spacy']['embeddings_path']
 FAISS_TRANSFORMER_INDEX_PATH = config['models']['transformer']['faiss_index_path']
 FAISS_SPACY_INDEX_PATH = config['models']['spacy']['faiss_index_path']
 
+# Define output paths for pre-computed hot keywords
+HOT_KEYWORDS_DIR = config['data']['hot_keywords_dir']
+YAKE_OUTPUT_PATH = os.path.join(HOT_KEYWORDS_DIR, "yake_hot_keywords.json")
+KEYBERT_OUTPUT_PATH = os.path.join(HOT_KEYWORDS_DIR, "keybert_hot_keywords.json")
+
 # Global variables
 df = None
 bm25_model = None
 transformer_index = None
 spacy_index = None
 
+# Cache for hot keywords lookup: {method: {article_id: [keywords]}}
+hot_keywords_cache = {}
+
 
 def initialize_models():
-    """Initialize all models and load dataset."""
-    global df, bm25_model, transformer_index, spacy_index
-    
-    logger.info("Initializing models...")
-    
+    """Initialize all models, pre-compute and cache hot keywords."""
+    global df, bm25_model, transformer_index, spacy_index, hot_keywords_cache
+
+    logger.info("Initializing models and pre-computing hot keywords...")
+
     # Load dataset
     df = pd.read_csv(ARTICLES_PATH)
-    logger.info(f"Loaded {len(df)} articles")
-    
+    logger.info(f"Loaded {len(df)} articles from {ARTICLES_PATH}")
+
     # Load BM25
     bm25_model, _ = build_bm25(df, "text", BM25_CORPUS_PATH, BM25_MODEL_PATH)
-    
+
     # Load Transformer embeddings and FAISS
     transformer_embeddings = compute_transformer_doc_vectors(df, "text", TRANSFORMER_EMBEDDINGS_PATH)
     transformer_index = build_or_load_faiss_index(FAISS_TRANSFORMER_INDEX_PATH, transformer_embeddings)
-    
+
     # Load spaCy embeddings and FAISS
     spacy_embeddings = compute_spacy_doc_vectors(df, "text", SPACY_EMBEDDINGS_PATH)
     spacy_index = build_or_load_faiss_index(FAISS_SPACY_INDEX_PATH, spacy_embeddings)
-    
-    logger.info("Models initialized successfully!")
+
+    # --- PRE-COMPUTE HOT KEYWORDS (ONLY ONCE) ---
+    os.makedirs(HOT_KEYWORDS_DIR, exist_ok=True)
+
+    # YAKE
+    if not os.path.exists(YAKE_OUTPUT_PATH):
+        logger.info(f"Pre-computing YAKE hot keywords → {YAKE_OUTPUT_PATH}")
+        extract_hot_keywords_yake(ARTICLES_PATH, YAKE_OUTPUT_PATH)
+    else:
+        logger.info(f"YAKE hot keywords already exist at {YAKE_OUTPUT_PATH}")
+
+    # KeyBERT
+    if not os.path.exists(KEYBERT_OUTPUT_PATH):
+        logger.info(f"Pre-computing KeyBERT hot keywords → {KEYBERT_OUTPUT_PATH}")
+        extract_hot_keywords_keybert(ARTICLES_PATH, KEYBERT_OUTPUT_PATH)
+    else:
+        logger.info(f"KeyBERT hot keywords already exist at {KEYBERT_OUTPUT_PATH}")
+
+    # --- LOAD HOT KEYWORDS INTO MEMORY ---
+    def load_keywords_from_file(file_path):
+        df_kw = pd.read_json(file_path)
+        return dict(zip(df_kw["id"], df_kw["hot_keywords"]))
+
+    hot_keywords_cache["YAKE"] = load_keywords_from_file(YAKE_OUTPUT_PATH)
+    hot_keywords_cache["KeyBERT"] = load_keywords_from_file(KEYBERT_OUTPUT_PATH)
+
+    logger.info("Hot keywords pre-loaded into memory for fast lookup.")
+    logger.info("All models initialized successfully!")
 
 
 def search_and_display(query, hot_keyword_method, search_method):
-    """Perform search and return formatted HTML results."""
+    """Perform search and display results using pre-computed hot keywords."""
     if not query or not query.strip():
-        return "<p style='text-align: center; color: var(--color-accent);'>⚠️ Please enter a search query.</p>"
-    
+        return "<p style='text-align: center; color: var(--color-accent);'>Warning: Please enter a search query.</p>"
+
     try:
         logger.info(f"Query: '{query}' | Keywords: {hot_keyword_method} | Search: {search_method}")
-        
+
         # Perform search
         if search_method == "Lexical Search":
             results = search_articles_bm25(query, df, bm25_model, top_n=5)
@@ -66,12 +105,14 @@ def search_and_display(query, hot_keyword_method, search_method):
             results = search_articles_spacy(query, df, spacy_index, top_n=5)
         else:  # Semantic Search
             results = search_articles_semantic(query, df, transformer_index, top_n=5)
-        
+
         if not results:
             return "<p style='text-align: center;'>No results found.</p>"
-        
-        keyword_top_n = config['keywords'][hot_keyword_method.lower()]['top_n']
-        # Build HTML output
+
+        # Get pre-computed keywords for this method
+        kw_lookup = hot_keywords_cache.get(hot_keyword_method, {})
+
+        # Build HTML
         html = f"""
         <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border-color-primary);">
             <h2 style="margin: 0 0 8px 0;">Search: {query}</h2>
@@ -80,19 +121,16 @@ def search_and_display(query, hot_keyword_method, search_method):
             </p>
         </div>
         """
-        
+
         for result in results:
             rank = result["rank"]
+            article_id = result["id"]
             text = result["text"]
-            
-            # Extract keywords
-            if hot_keyword_method == "YAKE":
-                keywords = get_yake_keywords_from_text(text, keyword_top_n)
-            else:
-                keywords = get_keybert_keywords_from_text(text, top_n=keyword_top_n)
 
-            keywords_str = ", ".join(keywords) if keywords else "No keywords extracted"
-            
+            # Get pre-computed keywords
+            keywords = kw_lookup.get(article_id, [])
+            keywords_str = ", ".join(keywords) if keywords else "No keywords"
+
             html += f"""
             <div style="margin-bottom: 24px; padding: 20px; border-radius: 8px; 
                         background: var(--block-background-fill); 
@@ -100,26 +138,26 @@ def search_and_display(query, hot_keyword_method, search_method):
                 <div style="display: inline-block; padding: 4px 12px; border-radius: 4px; 
                            background: var(--color-accent); color: white; font-weight: 600; 
                            margin-bottom: 12px;">Rank {rank}</div>
-                
+
                 <div style="margin: 16px 0; padding: 12px; border-radius: 6px; 
                            background: var(--background-fill-secondary); 
                            border-left: 3px solid var(--color-accent);">
                     <div style="font-weight: 600; margin-bottom: 8px;">Hot Keywords</div>
                     <div style="font-style: italic; color: var(--body-text-color-subdued);">{keywords_str}</div>
                 </div>
-                
+
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color-primary);">
                     <div style="font-weight: 600; margin-bottom: 12px;">Article</div>
                     <div style="text-align: justify; line-height: 1.7;">{text}</div>
                 </div>
             </div>
             """
-        
+
         return html
-    
+
     except Exception as e:
         logger.error(f"Error during search: {str(e)}")
-        return f"<p style='text-align: center; color: var(--color-accent);'>⚠️ Error: {str(e)}</p>"
+        return f"<p style='text-align: center; color: var(--color-accent);'>Warning: Error: {str(e)}</p>"
 
 
 def create_interface():
@@ -129,7 +167,7 @@ def create_interface():
         secondary_hue="slate",
         font=gr.themes.GoogleFont("Inter")
     )
-    
+
     css = """
     .gradio-container {
         max-width: 1400px !important;
@@ -137,10 +175,10 @@ def create_interface():
     }
     footer {display: none !important;}
     """
-    
+
     with gr.Blocks(title="SemSearch", theme=theme, css=css) as demo:
-        gr.Markdown("# 📰 SemSearch\n### Advanced Article Search Engine")
-        
+        gr.Markdown("# SemSearch\n### Advanced Article Search Engine")
+
         with gr.Row():
             query_input = gr.Textbox(
                 label="Search Query",
@@ -159,11 +197,10 @@ def create_interface():
                     value="Semantic Search",
                     label="Search Method"
                 )
-        
-        search_button = gr.Button("🔍 Search", variant="primary", size="lg")
+
+        search_button = gr.Button("Search", variant="primary", size="lg")
         output_display = gr.HTML(label="Results")
-        
-        # Connect events
+
         search_button.click(
             fn=search_and_display,
             inputs=[query_input, hot_keyword_method, search_method],
@@ -174,14 +211,14 @@ def create_interface():
             inputs=[query_input, hot_keyword_method, search_method],
             outputs=output_display
         )
-        
+
         gr.Markdown("""
         ---
         **Lexical Search** - BM25 keyword matching | 
         **Spacy Search** - spaCy embeddings | 
         **Semantic Search** - Transformer-based
         """)
-    
+
     return demo
 
 

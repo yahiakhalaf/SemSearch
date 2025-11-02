@@ -6,7 +6,7 @@ data:
   processed_dir: "data/processed"
   articles_csv: "data/processed/articles.csv"
   embeddings_dir: "data/embeddings"
-
+  hot_keywords_dir: "data/hot_keywords"
 # Model paths
 models:
   bm25:
