@@ -11,3 +11,4 @@ wheels/
 venv/
 uv.lock 
 logs/*
+tests/
