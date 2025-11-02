@@ -1,201 +1,78 @@
 query_id,query,id_1,id_2,id_3,id_4,id_5
-0,London Stock Exchange takeover battle between Deutsche Boerse and Euronext,1717,1724,2198,2203,1719
-1,Malcolm Glazer attempts full control of Manchester United,2199,2205,2219,1731,1715
-2,Standard Chartered buys South Korea's Korea First Bank,1731,2205,1715,1730,2219
-3,GM to build Cadillac in Saab factory to save Swedish plant,1715,1730,1731,2205,2219
-4,Air China plans $1bn dual listing in London and Hong Kong,1718,2216,1731,2205,1715
-5,"SBC acquires AT&T leading to 12,800 job cuts",1719,1731,2205,1715,1730
-6,Novartis becomes world’s largest generic drug maker,2210,1731,2205,1715,1730
-7,Shell and Qatar sign $6 billion LNG supply deal,2212,2213,1734,1740,2200
-8,Qantas posts record profit but warns of tsunami impact,1733,2221,2207,2220,1726
-9,BMW achieves record Asian sales despite China decline,1726,1733,2221,2207,2220
-10,James Hardie agrees $1.1bn payout to asbestos victims,1730,1715,1739,2211,2206
-11,EuroDisney sells new shares to avoid bankruptcy,1739,1730,1715,2211,2206
-12,Borussia Dortmund faces bankruptcy without rescue,2211,1730,1715,1739,2206
-13,Vodafone Japan loses customers despite 3G launch,2206,1733,2221,2207,2220
-14,GE reports 18% sales growth on global recovery,2221,1733,2207,2220,1726
-15,France GDP grows 0.8% driven by strong consumer spending,1716,1740,1723,2200,2222
-16,US trade deficit hits all-time high of $60 billion,2203,1734,2200,2222,1740
-17,German business confidence falls for first time in months,1732,1723,1740,2200,2222
-18,ECB keeps interest rates unchanged at 2%,1723,2222,2200,1740,1732
-19,US Federal Reserve raises rates to 2.25%,2222,2200,1740,1732,1723
-20,UK house prices rise 0.5% but annual growth slows,1721,1722,1740,2200,2222
-21,Brazil unemployment drops to lowest in three years,2204,1716,1740,1732,2222
-22,Deutsche Boerse investors demand LSE bid be dropped,1717,2198,1724,2203,1719
-23,Euronext makes approach to acquire London Stock Exchange,1724,2203,1719,1717,2198
-24,Rank Group to sell Deluxe Film and focus on gaming,1735,2216,1718,1731,2205
-25,News Corp buys out Fox minority shareholders,2216,2210,1735,1718,1731
-26,Multiplex shares plunge 19% on Wembley loss,2196,1730,1715,1739,2211
-27,Oil prices drop after OPEC rules out production cut,1720,2203,1740,2200,2222
-28,US dollar hits record low against euro at $1.3666,2200,2222,1740,1732,2203
-29,China exports surge 35% pushing trade surplus to 6-year high,1734,1740,1716,2200,2222
-30,EU leaders blame US for weak dollar and lost exports,1728,2200,2222,1740,1732
-31,Greenspan says US trade deficit will stabilize,2197,2200,2222,1740,2203
-32,China keeps yuan pegged despite US pressure,1734,1740,2200,2222,1728
-33,India and Russia sign major energy deals,2213,2212,1734,1740,2200
-34,Phil Spector accused of murder and negligence in LA,912,915,925,920,922
-35,Cyril Fletcher death and That's Life odd odes legacy,913,918,919,923,924
-36,Veteran comedian Cyril Fletcher dies at 91 in Guernsey,913,918,919,923,924
-37,BBC leads Bafta Interactive Awards nominations,914,917,921,926,927
-38,Radio Times website nominated for Bafta digital award,914,917,921,926,927
-39,George Michael documentary signals retirement from pop,915,920,922,923,924
-40,A Different Story film at Berlin Festival George Michael,915,920,922,923,924
-41,BPI postpones downloads in official charts to April,916,917,921,926,927
-42,OutKast wins three MTV Europe Music Awards in Rome,918,917,921,926,927
-43,Theo van Gogh Submission film withdrawn from Rotterdam,919,915,925,920,922
-44,Van Gogh festival tribute pulls controversial Submission,919,915,925,920,922
-45,Simon Fuller sells 19 Entertainment to Robert Sillerman,920,915,925,922,923
-46,Pop Idol creator Fuller in $156m deal with CFX,920,915,925,922,923
-47,Fahrenheit 9/11 wins People's Choice best film,921,922,926,927,928
-48,Michael Moore anti-Bush doc beats Passion of the Christ,921,922,926,927,928
-49,Marlon Brando rejected Godfather role initially,922,923,924,925,926
-50,Miyazaki animation earns 1.5bn yen in two days,923,924,926,927,928
-51,Dan O'Herlihy Oscar nominee for Robinson Crusoe dies,924,922,925,926,927
-52,Irish actor O'Herlihy in Robocop and Twin Peaks dead,924,922,925,926,927
-53,Kidman wins protection from photographers in Sydney,925,915,920,922,926
-54,DiCaprio receives lifetime award from Scorsese,926,922,927,928,929
-55,US box office predicted to hit $9.4 billion record,927,921,926,928,929
-56,Ticket sales high despite no Christmas blockbuster,927,921,926,928,929
-57,Alfonso Cuaron shakes up Potter with bleak visuals,1287,926,927,928,929
-58,CSI TV shows create unrealistic forensic expectations,1288,927,928,929,1290
-59,Queen tours with Paul Rodgers replacing Freddie Mercury,1289,918,920,921,1291
-60,Queen recruits Bad Company singer for 2005 tour,1289,918,920,921,1291
-61,Chris Evans sells possessions at Camden Market stall,1290,920,921,925,1292
-62,Evans clears clutter from LA and London homes,1290,920,921,925,1292
-63,Indie band Kasabian surges with cult following,1291,918,920,921,1295
-64,Brian McFadden Irish Son video withdrawn over school,1292,917,921,925,1293
-65,McFadden label pulls video after St Fintian's complaint,1292,917,921,925,1293
-66,US critics say public tired of celebrity love-ins,1293,921,926,927,1294
-67,Anonymous artist postcards sold for £35 each,1294,920,921,923,1295
-68,50 Cent ends feud with The Game at press conference,1295,918,921,1291,1296
-69,Who's Your Daddy adoption show refused by TV station,1296,921,925,1292,1297
-70,Fox affiliate rejects $100k father guessing game,1296,921,925,1292,1297
-71,Depp maverick roles with Tim Burton partnership,1297,922,926,927,1290
-72,Tony Blair Middle East peace mission with Sharon and Abbas,1298,1302,1304,1707,1714
-73,Blair surprise visit to Arafat tomb in Ramallah,1298,1302,1304,1707,1714
-74,Michael Howard admits truancy to play snooker in Llanelli,1299,1305,1708,1710,1711
-75,Howard calls for O-levels return and classroom discipline,1299,1305,1708,1710,1711
-76,Charles Clarke points system for UK economic migrants,1300,1304,1307,1713,1714
-77,Clarke rejects Tory immigration quotas,1300,1304,1307,1713,1714
-78,Teenagers low knowledge of UK political parties survey,1301,1302,1305,1707,1708
-79,Ofsted ICM poll on 14-16 year olds politics awareness,1301,1302,1305,1707,1708
-80,Labour Tories new headquarters close in Victoria Street,1302,1305,1707,1712,1714
-81,Quentin Davies MP mugged in Nairobi Kenya park,1303,1307,1713,1714,1715
-82,Davies attacked by six men loses passport and cash,1303,1307,1713,1714,1715
-83,Clarke five-year immigration plan fingerprinting visas,1304,1300,1307,1713,1714
-84,Blair no magic bullet on asylum abuses,1304,1300,1307,1713,1714
-85,Lynton Crosby denies Tory election defeat warning,1305,1302,1707,1712,1714
-86,Crosby Howard focus on 25-30 seat gains,1305,1302,1707,1712,1714
-87,Cross-party MPs draft bill for 70% elected House of Lords,1306,1302,1707,1714,1715
-88,Reform blueprint removes remaining hereditary peers,1306,1302,1707,1714,1715
-89,Clarke seeks deals to deport Belmarsh terror suspects,1307,1300,1304,1713,1714
-90,Memorandums of understanding no torture or death penalty,1307,1300,1304,1713,1714
-91,Blair school sport plan two hours PE and specialist colleges,1706,1301,1302,1707,1708
-92,£500m fund for PE teachers and inter-school competitions,1706,1301,1302,1707,1708
-93,Gordon Brown appeals for Labour unity amid Blair pledge reports,1707,1302,1712,1714,1715
-94,Brown Blair mutual animosity in Peston book,1707,1302,1712,1714,1715
-95,Michael Martin bans Blackberries in Commons chamber,1708,1305,1710,1711,1712
-96,MPs thrown out for using handheld devices during debates,1708,1305,1710,1711,1712
-97,Michael Howard New Year message Britain wrong direction,1709,1305,1710,1712,1714
-98,Howard attacks bossy interfering Labour government,1709,1305,1710,1712,1714
-99,Mrs Howard solo visits to target seats with helicopter,1710,1305,1708,1711,1712
-100,Damian Hockney defects UKIP to Kilroy-Silk Veritas,1711,1305,1708,1712,1714
-101,Veritas launch with deputy leader Hockney,1711,1305,1708,1712,1714
-102,Gordon Brown to take Labour media strategy from Milburn,1712,1302,1707,1714,1715
-103,Brown central role in election campaign polling boost,1712,1302,1707,1714,1715
-104,David Blunkett love for Kimberly Quinn and access battle,1713,1307,1714,1715,1707
-105,Blunkett personal responsibility in nanny visa row,1713,1307,1714,1715,1707
-106,Blair never attack Howard on Jewish beliefs,1714,1300,1304,1713,1715
-107,Blair Livingstone apologise to Jewish reporter,1714,1300,1304,1713,1715
-108,Ken Livingstone concentration camp guard comment row,1714,1300,1304,1713,1715
-109,Blair Iraq visit meets leaders in Baghdad and Basra,1298,1302,1304,1707,1714
-110,London conference March Palestinian reforms security,1298,1302,1304,1707,1714
-111,Tory immigration policy quotas vs Labour points,1300,1304,1307,1713,1714
-112,Law Lords Belmarsh detention unlawful human rights,1307,1300,1304,1713,1714
-113,School sport diversity yoga Tai Chi options,1706,1301,1302,1707,1708
-114,Blair Brown tsunami responses fuel rift speculation,1707,1302,1712,1714,1715
-115,Alastair Campbell Blackberry expletive to Newsnight,1708,1305,1710,1711,1712
-116,Tory co-chairman Liam Fox daily news conferences,1710,1305,1708,1711,1712
-117,UKIP suspends candidate criminally insane organs,1711,1305,1708,1712,1714
-118,Rinus Michels dies total football inventor,401,406,408,410,411
-119,Dutch coach Michels 1974 World Cup final,401,406,408,410,411
-120,South Africa Cosafa Cup Mauritius embarrassment,402,403,404,405,407
-121,Bafana Bafana face Seychelles in Curepipe,402,403,404,405,407
-122,Jonatan Johansson double Charlton 4-0 Norwich,403,404,405,406,408
-123,Curbishley faith in Johansson despite interest,403,404,405,406,408
-124,Liverpool 3-1 Newcastle Bramble own goal,404,405,406,408,410
-125,Chelsea late win Portsmouth Robben deflected,405,406,408,410,411
-126,Joe Cole injury time goal Fratton Park,405,406,408,410,411
-127,Newcastle 2-1 Heerenveen Uefa Cup Shearer,406,404,405,408,410
-128,Souness Laurent Robert key in European win,406,404,405,408,410
-129,Ian Rush future Chester uncertain severance,407,402,403,405,409
-130,Rush Aizlewood refuse resignation package,407,402,403,405,409
-131,Tama Umaga Lions tour fearsome opponents,408,406,410,411,412
-132,All Blacks captain backs NZ to beat Lions,408,406,410,411,412
-133,Marat Safin shock Dubai loss Nicolas Kiefer,903,905,906,907,908
-134,Safin first match post Australian Open defeat,903,905,906,907,908
-135,Ledley King withdraws Tottenham groin injury,904,906,907,908,909
-136,Taylor Dent Adelaide final Joachim Johansson,905,903,906,907,908
-137,Dent crushes Chela 6-1 6-1 hardcourt,905,903,906,907,908
-138,Martin Johnson retirement June testimonial,906,408,410,411,412
-139,Johnson final match Twickenham vs Lomu,906,408,410,411,412
-140,Paula Radcliffe World Cross Country decision,907,906,908,909,910
-141,Radcliffe London Marathon clash France March,907,906,908,909,910
-142,Josh Lewsey disallowed try Ireland Six Nations,908,906,909,910,911
-143,Lewsey positive grounded ball Kaplan error,908,906,909,910,911
-144,Sydney north south charity match tsunami Lions,909,408,410,411,412
-145,David Prutton FA ban Arsenal push referee,910,404,405,406,408
-146,Prutton improper conduct two charges Wiley,910,404,405,406,408
-147,Mike Ruddock rest Wales stars Celtic League,911,906,908,909,910
-148,WRU charter no release Six Nations players,911,906,908,909,910
-149,Michels Ajax European Cup 1971 Cruyff,401,406,408,410,411
-150,Cosafa Cup new format 13 teams groups,402,403,404,405,407
-151,Charlton fans criticism Curbishley pulling together,403,404,405,406,408
-152,Liverpool injury crisis Newcastle Bellamy out,404,405,406,408,410
-153,Portsmouth hold Chelsea until Robben 79th,405,406,408,410,411
-154,Souness Shearer 12 from Milburn record,406,404,405,408,410
-155,Chester League Two relegation zone Shrewsbury 5-0,407,402,403,405,409
-156,Kiefer tiebreak dominance Safin Dubai,903,905,906,907,908
-157,Wes Brown Jamie Carragher England centre backs,904,906,907,908,909
-158,Johansson Rochus tiebreak Adelaide crowd,905,903,906,907,908
-159,Johnson Leicester Heineken Cup back to back,906,408,410,411,412
-160,Hayley Yelling Radcliffe team bonus individual,907,906,908,909,910
-161,Mark Cueto offside try Hodgson cross kick,908,906,909,910,911
-162,Wallabies Gregan supports tsunami rugby match,909,408,410,411,412
-163,Prutton apology Pires tackle Redknapp,910,404,405,406,408
-164,Microsoft's entry into the web logging space,0,3,4,100,260
-165,free services for creating online journals,0,3,4,100,260
-166,what is MSN Spaces used for,0,3,4,100,260
-167,companies that offer online photo storage,0,2,3,4,100
-168,how does Yahoo's desktop search work,0,3,4,100,260
-169,details on the chip powering Sony's PlayStation 3,1,20,60,100,160
-170,technical specifications of the Cell chip,1,20,60,100,160
-171,next-generation console launch schedule,1,20,60,100,160
-172,concerns about privacy with desktop search tools,3,120,240,320,400
-173,security risks of unprotected broadband connection,40,120,240,320,400
-174,convictions for piracy on peer-to-peer networks,1,80,140,200,220
-175,impact of malicious programs on computer networks,3,120,240,320,400
-176,legal action against film downloading facilitators,1,80,140,200,220
-177,"are \trusted computers\"" really secure""",3,120,240,320,400
-178,what is digital obesity in the UK,2,4,60,100,300
-179,comparison of hard drives versus memory keys for storage,2,4,60,100,300
-180,importance of e-mail archiving in businesses,3,120,240,320,400
-181,Virgin Radio's 3G broadcast service,2,60,100,300,340
-182,how secure are company wireless data networks,120,180,240,320,400
-183,adoption of multimedia mobile phones for internet access in the UK,2,60,100,300,340
-184,community computer centers in Peru using wireless technology,100,180,280,300,320
-185,top innovator award winners in PC Pro Magazine,1,60,100,160,360
-186,rise of broadband speeds in the UK,40,280,300,320,400
-187,crackdown on internet cafes in China,100,180,280,380,400
-188,problems with transferring files between different memory types,2,3,4,60,100
-189,document security warning about Microsoft Word files,3,120,240,320,400
-190,why are viruses now profitable for criminal gangs,3,120,240,320,400
-191,future of home entertainment after DVD,1,60,100,200,220
-192,what does Picasa software do for photos,0,2,3,4,100
-193,court ruling on linking to downloadable MP3 files,1,80,140,200,220
-194,analyst opinion on the usefulness of desktop search,0,3,4,240,260
-195,how is the cost of hard drives changing,2,4,60,100,300
-196,"who is driving the move towards smaller, functional devices",2,4,60,100,300
-197,percentage of business's critical information stored in e-mail,3,120,240,320,400
-198,Do search engine users notice online advertisements?,0,3,4,100,260
-199,How has the blogosphere grown in the last 18 months?,0,3,4,100,260
+1,"What were the major factors behind Time Warner's profit increase in Q4 2004?",0,10,34,49,3
+2,"How did high fuel prices impact British Airways' profits in late 2004?",3,27,44,29,25
+3,"Which companies were involved in the battle to acquire UFJ Holdings in Japan?",31,36,12,46,34
+4,"What were the key economic indicators mentioned for Japan in 2004–2005?",5,43,45,21,30
+5,"How did the US trade deficit evolve in 2004, and what were the main contributing factors?",23,1,6,40,44
+6,"Which global companies made significant investments or acquisitions in China during 2004–2005?",18,33,38,12,50
+7,"What restructuring plans were reported for Fiat and its luxury brands in early 2005?",50,12,48,20,34
+8,"How did oil price surges in early 2005 affect global economic forecasts according to the OECD?",29,27,44,23,40
+9,"What deal did Ryanair sign with Boeing, and how many jobs was it expected to create?",46,01,25,3,34
+10,"Why did Yukos file for bankruptcy protection in the US, and what was the outcome?",24,2,27,9,40
+11,"How did Parmalat plan to return to the Italian stock market after its 2003 scandal?",47,16,50,34,20
+12,"What investment did BMW announce for the Mini production plant in Oxford?",48,12,50,46,20
+13,"Why did Nestlé report a sales decline in 2004 despite strong regional performance?",49,29,3,27,44
+14,"What was the outcome of the legal case against major US tobacco companies in 2005?",9,40,23,1,6
+15,"How did Ask Jeeves benefit from the online advertising revival in 2004?",10,34,0,19,49
+16,"What joint venture was formed between Mitsubishi Motors and Peugeot in 2005?",12,50,48,46,20
+17,"Why did WPP acquire Grey Global, and how did it impact its market position?",34,10,0,19,49
+18,"What cost-cutting measures did UK Coal implement after reporting deeper losses in 2004?",41,13,20,3,21
+19,"What new EU air passenger rights were introduced in 2005, and how did airlines react?",14,3,46,25,34
+20,"How did India reform its foreign direct investment rules in the telecom sector in 2005?",18,17,7,30,6
+21,"What warnings did Alan Greenspan issue about the US budget deficit in 2005?",40,1,23,6,29
+22,"Why was the Colombian government failing to distribute subsidies to the poor effectively?",32,8,28,42,51
+23,"What measures did the Italian government propose in 2005 to boost economic growth?",51,22,50,29,40
+24,"How did rising oil prices affect US gasoline prices and refinery operations in early 2005?",44,27,29,25,3
+25,"How did Ethiopia’s crop production in 2004 compare to previous years, and what aid was still needed?",8,32,28,42,7
+26,"What steps did Saudi Arabia take in 2005 to increase female participation in the workforce?",42,32,8,28,51
+27,"Why was British firm Vestey Group’s land in Venezuela targeted for seizure in 2005?",28,32,8,42,51
+28,"How did the Indian rupee react to the S&P credit rating upgrade in early 2005?",17,18,7,30,6
+29,"What challenges did call centres face in 2004 according to the Dimension Data survey?",19,10,34,0,49
+30,"What caused Reuters' revenues to slip 11% in 2004?",52,90,96,88,72
+31,"How much will Hyundai invest in its new plant in India to boost production capacity?",53,67,95,55,69
+32,"What tax cuts and social spending increases were central to South Africa's 2005 budget?",54,71,84,60,64
+33,"How did BMW perform in Asian car sales in 2004, and what are its growth targets?",55,53,98,69,81
+34,"Why does the Bank of England believe UK economic growth was stronger than official Q3 estimates?",56,84,60,85,72
+35,"Which plants is Electrolux relocating to low-cost countries as part of its restructuring?",57,80,61,95,69
+36,"What did Cynthia Cooper reveal about WorldCom's accounting practices in Bernie Ebbers' trial?",58,86,82,59,78
+37,"How many guilty pleas has the US insurance fraud investigation by Eliot Spitzer obtained?",59,78,58,86,82
+38,"Why did UK jobless numbers rise in December 2004 despite record employment levels?",60,84,85,56,72
+39,"Why will Multiplex Group make no profit on the new Wembley stadium project?",61,81,69,95,67
+40,"What drove the 0.3% fall in US retail sales in January, and how did non-auto sales perform?",62,93,84,71,60
+41,"Why might Lufthansa sue German federal agencies over President Bush's Frankfurt visit?",63,79,74,64,19
+42,"What proposals are EU finance ministers discussing to increase development aid for poor nations?",64,74,54,79,66
+43,"Why did German business confidence fall to 95.5 in February according to the Ifo index?",65,97,72,88,56
+44,"How do agricultural subsidies in rich nations impact farmers in developing countries per the FAO?",66,54,79,64,74
+45,"What changes did India make to foreign direct investment rules in its construction sector?",67,53,95,55,69
+46,"What is the range and unique selling point of Boeing's new 777-200LR aircraft?",68,98,55,53,81
+47,"Who made a $3.25bn takeover offer for Circuit City, and why might a bidding war ensue?",69,81,61,95,67
+48,"Why are Japanese brewers shifting profits to beer-flavoured alternatives like happoshu?",70,98,71,60,84
+49,"How is South Korea's economy recovering from its credit card debt crisis in 2004-2005?",71,60,84,93,62
+50,"What caused Germany's economy to shrink 0.2% in Q4 2004 despite earlier growth?",72,65,97,88,56
+51,"Why did Iran's parliament reduce Turkcell's stake in the Irancell mobile network deal?",73,91,79,63,58
+52,"How are closures linked to the Palestinian economic crisis according to the World Bank?",75,66,54,79,64
+53,"How did China help Russia finance the purchase of Yukos' Yugansk unit?",76,90,82,58,86
+54,"What prompted Australia to raise its interest rate to 5.5% in 2005 despite economic slowdown signs?",100,101,105,118,120
+55,"How much did Titan agree to pay for admitting bribery in Benin?",101,100,102,121,103
+56,"What caused Marsh & McLennan's $676m loss in Q4 2004?",102,103,121,144,105
+57,"Why is the US Justice Department appealing the $280bn tobacco damages ruling?",103,102,121,144,106
+58,"What is the price and target market for Aston Martin's new V8 Vantage?",104,116,140,148,127
+59,"What did Ed Balls say about Gordon Brown's golden rule and potential Budget moves?",105,118,150,137,120
+60,"How did Liberia's GDP change in 2004 according to the IMF, and what reforms are needed?",106,107,119,132,135
+61,"Why did the US ISM manufacturing index fall to 55.3 in February 2005?",107,108,117,139,133
+62,"How much profit did Lufthansa report for 2004 compared to 2003?",108,109,117,127,131
+63,"What caused Japan's economic growth to stall at 0.1% in Q3 2004?",109,110,124,130,141
+64,"Why did Unilever report a 36% drop in pre-tax profits to 2.9bn euros in 2004?",110,111,142,131,102
+65,"How did Orange's subscriber growth impact France Telecom's 2004 profits?",111,112,117,123,131
+66,"What allegations did the European Commission make against Vodafone and T-Mobile in Germany?",112,113,130,141,147
+67,"What did Scott Sullivan admit in the WorldCom trial regarding Bernard Ebbers?",113,114,102,121,103
+68,"Why did GlaxoSmithKline's profits fall 9% in 2004, and what new drugs is it relying on?",114,115,149,131,142
+69,"What merger speculation caused shares in Sumitomo Mitsui and Daiwa to rise?",115,116,130,124,147
+70,"How did Mercedes' profit slump affect DaimlerChrysler's Q4 2004 results?",116,117,140,148,127
+71,"What were Ericsson's Q4 2004 profits, and how did margins compare to forecasts?",117,118,108,131,111
+72,"Why did the Bank of England keep interest rates at 4.75% for the sixth month?",118,119,150,137,120
+73,"What is Nigeria's plan to triple cocoa production by 2008?",119,120,132,106,135
+74,"How many jobs were added to the US economy in October 2004, exceeding expectations?",120,121,133,137,141
+75,"What settlement did Bank of America reach with the SEC over mutual fund fraud?",121,122,144,102,103
+76,"Why did Buenos Aires underground workers strike, causing transport chaos?",122,123,127,144,135
+77,"Why did WMC Resources' profits rise fivefold in 2004 amid a takeover bid?",124,125,130,116,139
