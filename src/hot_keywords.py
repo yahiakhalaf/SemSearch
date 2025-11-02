@@ -3,13 +3,17 @@ import pandas as pd
 import yake
 from keybert import KeyBERT
 from src.logger_config import load_logger
+from src.config import load_config
 
-
-# Initialize logger
+config = load_config()
 logger = load_logger()
 
+YAKE_CFG = config['keywords']['yake']
+KEYBERT_CFG = config['keywords']['keybert']
+KEYBERT_MODEL = config['models']['keybert']['model_name']
 
-def get_yake_keywords_from_text(text, top_n=10):
+
+def get_yake_keywords_from_text(text, top_n=None):
     """
     Extract top keywords from a single text using YAKE.
 
@@ -20,6 +24,7 @@ def get_yake_keywords_from_text(text, top_n=10):
     Returns:
         list[str]: List of extracted keyword strings.
     """
+    top_n = top_n or YAKE_CFG['top_n']
     kw_extractor = yake.KeywordExtractor(
         lan="en",
         n=3,                      # Extract up to 3-word phrases
@@ -32,7 +37,7 @@ def get_yake_keywords_from_text(text, top_n=10):
     return [kw[0] for kw in kw_extractor.extract_keywords(text)]
 
 
-def extract_hot_keywords_yake(input_path, output_path, top_n=10):
+def extract_hot_keywords_yake(input_path, output_path, top_n=None):
     """
     Extract hot keywords for each article using YAKE and save them to JSON.
 
@@ -41,6 +46,7 @@ def extract_hot_keywords_yake(input_path, output_path, top_n=10):
         output_path (str): Path to save the output JSON file.
         top_n (int): Number of keywords to extract per article.
     """
+    top_n = top_n or YAKE_CFG['top_n']
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"Input file not found: {input_path}")
 
@@ -67,9 +73,9 @@ def extract_hot_keywords_yake(input_path, output_path, top_n=10):
 
 
 # Load KeyBERT model 
-kw_model = KeyBERT(model='all-MiniLM-L6-v2')
+kw_model = KeyBERT(model=KEYBERT_MODEL)
 
-def get_keybert_keywords_from_text(text, top_n=10):
+def get_keybert_keywords_from_text(text, top_n=None):
     """
     Extract keywords for a single document using KeyBERT.
 
@@ -80,16 +86,17 @@ def get_keybert_keywords_from_text(text, top_n=10):
     Returns:
         list[str]: List of extracted keywords.
     """
+    top_n = top_n or KEYBERT_CFG['top_n']
     keywords = kw_model.extract_keywords(
         text,
-        keyphrase_ngram_range=(1, 3),  # 1–3 word phrases
-        stop_words='english',
+        keyphrase_ngram_range=tuple(KEYBERT_CFG['ngram_range']), 
+        stop_words=KEYBERT_CFG['stop_words'],
         top_n=top_n
     )
     return [kw[0] for kw in keywords]
 
 
-def extract_hot_keywords_keybert(input_path, output_path, top_n=10):
+def extract_hot_keywords_keybert(input_path, output_path, top_n=None):
     """
     Extract hot keywords for each article using KeyBERT and save to JSON.
 
@@ -98,6 +105,7 @@ def extract_hot_keywords_keybert(input_path, output_path, top_n=10):
         output_path (str): Path to save the output JSON file.
         top_n (int): Number of keywords per article.
     """
+    top_n = top_n or KEYBERT_CFG['top_n']
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"Input file not found: {input_path}")
 

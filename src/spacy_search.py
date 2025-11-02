@@ -5,17 +5,20 @@ import spacy
 import pandas as pd
 from src.utils import clean_text
 from src.logger_config import load_logger
+from src.config import load_config
 
+config = load_config()
 logger = load_logger()
 
 # Load spaCy model
-nlp = spacy.load("en_core_web_lg")
+nlp = spacy.load(config['models']['spacy']['model_name'])
 
 
-def compute_spacy_doc_vectors(df, text_col="text", save_path="../data/embeddings/spacy_doc_vectors.npy"):
+def compute_spacy_doc_vectors(df, text_col="text", save_path=None):
     """
     Compute and cache document embeddings using spaCy.
     """
+    save_path = save_path or config['models']['spacy']['embeddings_path']
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
     if os.path.exists(save_path):

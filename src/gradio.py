@@ -6,17 +6,19 @@ from src.lexical_search import build_bm25, search_articles_bm25
 from src.semantic_search import compute_transformer_doc_vectors, search_articles_semantic
 from src.spacy_search import compute_spacy_doc_vectors, search_articles_spacy
 from src.utils import build_or_load_faiss_index
+from src.config import load_config
 
+config = load_config()
 logger = setup_logger()
 
 # File paths
-ARTICLES_PATH = "data/processed/articles.csv"
-BM25_CORPUS_PATH = "data/embeddings/bm25_corpus.pkl"
-BM25_MODEL_PATH = "data/embeddings/bm25_model.pkl"
-TRANSFORMER_EMBEDDINGS_PATH = "data/embeddings/transformer_embeddings.npy"
-SPACY_EMBEDDINGS_PATH = "data/embeddings/spacy_doc_vectors.npy"
-FAISS_TRANSFORMER_INDEX_PATH = "data/embeddings/faiss_transformer_index.bin"
-FAISS_SPACY_INDEX_PATH = "data/embeddings/faiss_spacy_index.bin"
+ARTICLES_PATH = config['data']['articles_csv']
+BM25_CORPUS_PATH = config['models']['bm25']['corpus_path']
+BM25_MODEL_PATH = config['models']['bm25']['model_path']
+TRANSFORMER_EMBEDDINGS_PATH = config['models']['transformer']['embeddings_path']
+SPACY_EMBEDDINGS_PATH = config['models']['spacy']['embeddings_path']
+FAISS_TRANSFORMER_INDEX_PATH = config['models']['transformer']['faiss_index_path']
+FAISS_SPACY_INDEX_PATH = config['models']['spacy']['faiss_index_path']
 
 # Global variables
 df = None
@@ -68,6 +70,7 @@ def search_and_display(query, hot_keyword_method, search_method):
         if not results:
             return "<p style='text-align: center;'>No results found.</p>"
         
+        keyword_top_n = config['keywords'][hot_keyword_method.lower()]['top_n']
         # Build HTML output
         html = f"""
         <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border-color-primary);">
@@ -84,10 +87,10 @@ def search_and_display(query, hot_keyword_method, search_method):
             
             # Extract keywords
             if hot_keyword_method == "YAKE":
-                keywords = get_yake_keywords_from_text(text, top_n=10)
+                keywords = get_yake_keywords_from_text(text, keyword_top_n)
             else:
-                keywords = get_keybert_keywords_from_text(text, top_n=10)
-            
+                keywords = get_keybert_keywords_from_text(text, top_n=keyword_top_n)
+
             keywords_str = ", ".join(keywords) if keywords else "No keywords extracted"
             
             html += f"""
@@ -186,8 +189,8 @@ if __name__ == "__main__":
     initialize_models()
     demo = create_interface()
     demo.launch(
-        share=False,
-        server_name="127.0.0.1",
-        server_port=7860,
+        share=config['interface']['server']['share'],
+        server_name=config['interface']['server']['host'],
+        server_port=config['interface']['server']['port'],
         show_error=True
     )

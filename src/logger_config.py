@@ -1,8 +1,11 @@
 import logging
 from datetime import datetime
 from pathlib import Path
+from src.config import load_config
 
-LOG_DIR = Path("logs")
+config= load_config()
+
+LOG_DIR = Path(config['logging']['dir'])
 LOG_DIR.mkdir(exist_ok=True)
 
 
@@ -11,7 +14,7 @@ def setup_logger() -> logging.Logger:
     Create a new timestamped log file and return a configured logger.
     """
     logger = logging.getLogger("app_logger")
-    logger.setLevel(logging.INFO)
+    logger.setLevel(config['logging']['level'])
     logger.handlers.clear()
 
     # Timestamped log file
@@ -42,7 +45,7 @@ def load_logger() -> logging.Logger:
     latest = log_files[0]
 
     logger = logging.getLogger("app_logger")
-    logger.setLevel(logging.INFO)
+    logger.setLevel(config['logging']['level'])
     logger.handlers.clear()
 
     fmt = '%(asctime)s - [%(module)s] - %(levelname)s - %(message)s'

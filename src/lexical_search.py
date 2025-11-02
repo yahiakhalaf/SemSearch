@@ -5,15 +5,19 @@ import numpy as np
 from rank_bm25 import BM25Okapi
 from src.utils import preprocess_text
 from src.logger_config import load_logger
+from src.config import load_config
 
+config = load_config()
 logger = load_logger()
 
 
-def build_bm25(df, text_col, corpus_path, model_path):
+def build_bm25(df, text_col, corpus_path=None, model_path=None):
     """
     Build and cache BM25 model and tokenized corpus.
     If saved versions exist, they are loaded from disk.
     """
+    corpus_path = corpus_path or config['models']['bm25']['corpus_path']
+    model_path = model_path or config['models']['bm25']['model_path']
     os.makedirs(os.path.dirname(corpus_path), exist_ok=True)
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
 

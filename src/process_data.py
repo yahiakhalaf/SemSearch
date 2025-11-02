@@ -1,11 +1,13 @@
 import os
 import pandas as pd
 from src.logger_config import load_logger
+from src.config import load_config
 
+config = load_config()
 logger = load_logger()
 
-base_dir = "data/raw/NewsArticles"
-output_path = "data/processed/articles.csv"
+base_dir = config['data']['raw_dir']
+output_path = config['data']['articles_csv']
 
 data = []
 article_id = 0

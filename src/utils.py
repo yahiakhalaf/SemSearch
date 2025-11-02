@@ -6,11 +6,13 @@ from contractions import fix
 import os
 import faiss
 from src.logger_config import load_logger
+from src.config import load_config
 
+config = load_config()
 logger = load_logger()
 
 # Load spaCy model once globally
-nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+nlp = spacy.load(config['models']['spacy']['small_model'], disable=["parser", "ner"])
 
 def clean_text(text: str) -> str:
     """

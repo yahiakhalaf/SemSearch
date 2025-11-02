@@ -5,17 +5,20 @@ import faiss
 from sentence_transformers import SentenceTransformer
 from src.utils import clean_text
 from src.logger_config import load_logger
+from src.config import load_config
 
+config = load_config()
 logger = load_logger()
 
 # Load SentenceTransformer model
-embedder = SentenceTransformer('all-MiniLM-L6-v2')
+embedder = SentenceTransformer(config['models']['transformer']['model_name'])
 
 
-def compute_transformer_doc_vectors(df, text_col, save_path):
+def compute_transformer_doc_vectors(df, text_col, save_path=None):
     """
     Compute and cache SentenceTransformer embeddings for each document.
     """
+    save_path = save_path or config['models']['transformer']['embeddings_path']
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
     if os.path.exists(save_path):
