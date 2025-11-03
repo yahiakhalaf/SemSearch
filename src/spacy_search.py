@@ -10,13 +10,21 @@ from src.config import load_config
 config = load_config()
 logger = load_logger()
 
-# Load spaCy model
+# Load spaCy model for vector extraction
 nlp = spacy.load(config['models']['spacy']['model_name'])
 
 
 def compute_spacy_doc_vectors(df, text_col="text", save_path=None):
     """
-    Compute and cache document embeddings using spaCy.
+    Compute and cache document vectors using spaCy's word vectors.
+
+    Args:
+        df (pd.DataFrame): Article dataset.
+        text_col (str): Column with text.
+        save_path (str, optional): Cache path.
+
+    Returns:
+        np.ndarray: Document vectors (N x dim).
     """
     save_path = save_path or config['models']['spacy']['embeddings_path']
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -32,11 +40,18 @@ def compute_spacy_doc_vectors(df, text_col="text", save_path=None):
     return doc_vectors
 
 
-
 def search_articles_spacy(query, df, index, top_n=5):
     """
-    Perform semantic search using FAISS + spaCy.
-    Returns top N most similar articles as JSON with rank.
+    Perform semantic search using spaCy vectors and FAISS.
+
+    Args:
+        query (str): Search query.
+        df (pd.DataFrame): Article dataset.
+        index (faiss.Index): FAISS inner-product index.
+        top_n (int): Number of results.
+
+    Returns:
+        list[dict]: Ranked results with similarity.
     """
     try:
         logger.info(f"Running spaCy semantic search for query: '{query}'")

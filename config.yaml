@@ -12,8 +12,8 @@ data:
 # Model paths
 models:
   bm25:
-    corpus_path: "data/embeddings/bm25_corpus.pkl"
-    model_path: "data/embeddings/bm25_model.pkl"
+    corpus_path: "models/bm25_corpus.pkl"
+    model_path: "models/bm25_model.pkl"
   
   transformer:
     embeddings_path: "data/embeddings/transformer_embeddings.npy"

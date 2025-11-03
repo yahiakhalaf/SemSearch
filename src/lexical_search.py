@@ -13,8 +13,16 @@ logger = load_logger()
 
 def build_bm25(df, text_col, corpus_path=None, model_path=None):
     """
-    Build and cache BM25 model and tokenized corpus.
-    If saved versions exist, they are loaded from disk.
+    Build and cache a BM25 model and tokenized corpus.
+
+    Args:
+        df (pd.DataFrame): Article dataset.
+        text_col (str): Column containing text.
+        corpus_path (str, optional): Path to save tokenized corpus.
+        model_path (str, optional): Path to save BM25 model.
+
+    Returns:
+        tuple: (BM25Okapi model, tokenized corpus)
     """
     corpus_path = corpus_path or config['models']['bm25']['corpus_path']
     model_path = model_path or config['models']['bm25']['model_path']
@@ -50,36 +58,29 @@ def build_bm25(df, text_col, corpus_path=None, model_path=None):
 
 def search_articles_bm25(query_sentence, df, bm25, top_n=5):
     """
-    Retrieve the most relevant articles for a query using BM25.
+    Retrieve top-N articles using BM25 scoring.
 
     Args:
-        query_sentence (str): The search query.
-        df (pd.DataFrame): The dataset containing text.
-        bm25 (BM25Okapi): The trained BM25 model.
+        query_sentence (str): Raw user query.
+        df (pd.DataFrame): Article dataset.
+        bm25 (BM25Okapi): Trained BM25 model.
         top_n (int): Number of results to return.
 
     Returns:
-        list[dict]: JSON-like list of top N matching articles with rank and score.
+        list[dict]: Ranked results with id, category, score, and text.
     """
     try:
         logger.info(f"Processing search query: '{query_sentence}'")
 
-        # Preprocess query
         query_tokens = preprocess_text(query_sentence)
-
-        # Compute BM25 scores
         scores = bm25.get_scores(query_tokens)
 
-        # Sort and select top-N
         top_n_idx = np.argsort(scores)[::-1][:top_n]
         results = df.iloc[top_n_idx].copy()
         results["bm25_score"] = scores[top_n_idx]
         results["rank"] = np.arange(1, len(results) + 1)
 
-        # Reorder columns for clarity
         results = results[["rank", "id", "category", "bm25_score", "text"]]
-
-        # Convert DataFrame to JSON-compatible list of dicts
         results_json = results.to_dict(orient="records")
 
         logger.info(f"Top {top_n} results retrieved for query: '{query_sentence}'")

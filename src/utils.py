@@ -11,14 +11,25 @@ from src.config import load_config
 config = load_config()
 logger = load_logger()
 
-# Load spaCy model once globally
+# Load spaCy model once globally (disabled components for speed)
 nlp = spacy.load(config['models']['spacy']['small_model'], disable=["parser", "ner"])
+
 
 def clean_text(text: str) -> str:
     """
-    Basic text normalization:
-    - Lowercase
-    - Remove punctuation, newlines, and extra whitespace
+    Basic text normalization.
+
+    Steps:
+    - Convert to lowercase
+    - Replace newlines with space
+    - Collapse multiple spaces
+    - Remove punctuation
+
+    Args:
+        text (str): Raw input text.
+
+    Returns:
+        str: Cleaned text.
     """
     if not isinstance(text, str):
         return ""
@@ -32,14 +43,19 @@ def clean_text(text: str) -> str:
 
 def preprocess_text(text: str):
     """
-    Full preprocessing pipeline:
-    1. Clean text (normalize case, punctuation, whitespace)
+    Full preprocessing pipeline for lexical search (BM25).
+
+    Steps:
+    1. Clean text
     2. Expand contractions
-    3. Lemmatize with spaCy
+    3. Lemmatize using spaCy
     4. Remove stopwords and short tokens
 
+    Args:
+        text (str): Input text.
+
     Returns:
-        list of lemmatized tokens
+        list[str]: List of lemmatized tokens.
     """
     if not isinstance(text, str):
         return []
@@ -52,10 +68,16 @@ def preprocess_text(text: str):
     return tokens
 
 
-def build_or_load_faiss_index(index_path,doc_vectors):
+def build_or_load_faiss_index(index_path, doc_vectors):
     """
-    Build or load a FAISS index with spaCy embeddings.
-    Returns: FAISS index and document vectors.
+    Build or load a FAISS inner-product index for normalized vectors.
+
+    Args:
+        index_path (str): File path to save/load the index.
+        doc_vectors (np.ndarray): Document embedding matrix (float32, L2-normalized).
+
+    Returns:
+        faiss.Index: FAISS index ready for search.
     """
     os.makedirs(os.path.dirname(index_path), exist_ok=True)
 

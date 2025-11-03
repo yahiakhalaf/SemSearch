@@ -12,22 +12,34 @@ from src.spacy_search import compute_spacy_doc_vectors, search_articles_spacy
 from src.semantic_search import compute_transformer_doc_vectors, search_articles_semantic
 from src.utils import build_or_load_faiss_index
 from src.config import load_config
-from src.logger_config import load_logger
+from src.logger_config import setup_logger
 
 
 config = load_config()
-logger = load_logger()
+logger = setup_logger()
 
 
 def evaluate_model(search_function, ground_truth, df, model_name="Model", k=5, **kwargs):
     """
-    Evaluate a search model using Precision@K, NDCG@K, and MAP.
+    Evaluate a search model using Precision@K, NDCG@K, and Mean Average Precision (MAP).
+
+    Args:
+        search_function (Callable): Function that takes a query and returns top-k results.
+        ground_truth (dict): Mapping of query -> list of relevant document IDs.
+        df (pd.DataFrame): Full article dataset with `id` column.
+        model_name (str, optional): Name of the model for reporting. Defaults to "Model".
+        k (int, optional): Cut-off rank for evaluation metrics. Defaults to 5.
+        **kwargs: Additional arguments passed to `search_function`.
+
+    Returns:
+        dict: Evaluation metrics including Precision@K, NDCG@K, and MAP.
     """
     precisions, ndcgs, aps = [], [], []
 
     logger.info(f"Evaluating model: {model_name}")
 
     for query, relevant_ids in ground_truth.items():
+        # Retrieve top-k results for the current query
         results = search_function(query, df, top_n=k, **kwargs)
         retrieved_ids = [result["id"] for result in results]
 
@@ -42,14 +54,26 @@ def evaluate_model(search_function, ground_truth, df, model_name="Model", k=5, *
         "MAP": np.mean(aps),
     }
 
-    logger.info(f"✅ {model_name} results: {result}")
+    logger.info(f"{model_name} results: {result}")
     return result
 
 
 def run_complete_evaluation(df, bm25, index_spacy, index_semantic, k=5):
     """
-    Run evaluation for all three models, using paths from config.
-    Saves results to config["data"]["evaluation_results"].
+    Run evaluation for all three search models (Lexical, spaCy, Semantic).
+
+    Loads ground truth from the first CSV in the evaluation directory and saves
+    a comparison DataFrame to the configured output path.
+
+    Args:
+        df (pd.DataFrame): Preprocessed article dataset.
+        bm25 (BM25Okapi): Trained BM25 model instance.
+        index_spacy (faiss.Index): FAISS index for spaCy embeddings.
+        index_semantic (faiss.Index): FAISS index for transformer embeddings.
+        k (int, optional): Rank cut-off for metrics. Defaults to 5.
+
+    Returns:
+        pd.DataFrame: Comparison of all models' performance.
     """
     eval_dir = config["data"]["evaluation_dir"]
     results_path = config["data"]["evaluation_results"]
@@ -67,23 +91,26 @@ def run_complete_evaluation(df, bm25, index_spacy, index_semantic, k=5):
     ground_truth = load_ground_truth(eval_csv_path)
     results = []
 
-    # Evaluate models - FIXED: Added bm25=bm25 parameter
-    results.append(evaluate_model(search_articles_bm25, ground_truth, df, model_name="Lexical Model", k=k, bm25=bm25))
-    results.append(evaluate_model(search_articles_spacy, ground_truth, df, model_name="spaCy Model", k=k, index=index_spacy))
-    results.append(evaluate_model(search_articles_semantic, ground_truth, df, model_name="Semantic Model", k=k, index=index_semantic))
+    # Evaluate each model with required parameters
+    results.append(evaluate_model(search_articles_bm25, ground_truth, df,
+                                  model_name="Lexical Model", k=k, bm25=bm25))
+    results.append(evaluate_model(search_articles_spacy, ground_truth, df,
+                                  model_name="spaCy Model", k=k, index=index_spacy))
+    results.append(evaluate_model(search_articles_semantic, ground_truth, df,
+                                  model_name="Semantic Model", k=k, index=index_semantic))
 
     comparison_df = pd.DataFrame(results)
 
     os.makedirs(os.path.dirname(results_path), exist_ok=True)
     comparison_df.to_csv(results_path, index=False)
-    logger.info(f"📊 Evaluation results saved to: {results_path}")
+    logger.info(f"Evaluation results saved to: {results_path}")
 
     return comparison_df
 
 
 def main():
-    """Run full evaluation pipeline end-to-end."""
-    logger.info("🚀 Starting evaluation pipeline...")
+    """Run the full evaluation pipeline end-to-end."""
+    logger.info("Starting evaluation pipeline...")
 
     # Load dataset
     articles_path = config["data"]["articles_csv"]
@@ -116,7 +143,7 @@ def main():
         k=5,
     )
 
-    logger.info("✅ Evaluation completed successfully.")
+    logger.info("Evaluation completed successfully.")
     print("\n=== Evaluation Results ===")
     print(comparison_df)
     print("\nSaved results to:", config["data"]["evaluation_results"])

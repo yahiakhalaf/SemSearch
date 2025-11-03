@@ -16,7 +16,7 @@ from src.config import load_config
 config = load_config()
 logger = setup_logger()
 
-# File paths
+# === File Paths ===
 ARTICLES_PATH = config['data']['articles_csv']
 BM25_CORPUS_PATH = config['models']['bm25']['corpus_path']
 BM25_MODEL_PATH = config['models']['bm25']['model_path']
@@ -25,23 +25,20 @@ SPACY_EMBEDDINGS_PATH = config['models']['spacy']['embeddings_path']
 FAISS_TRANSFORMER_INDEX_PATH = config['models']['transformer']['faiss_index_path']
 FAISS_SPACY_INDEX_PATH = config['models']['spacy']['faiss_index_path']
 
-# Define output paths for pre-computed hot keywords
 HOT_KEYWORDS_DIR = config['data']['hot_keywords_dir']
 YAKE_OUTPUT_PATH = os.path.join(HOT_KEYWORDS_DIR, "yake_hot_keywords.json")
 KEYBERT_OUTPUT_PATH = os.path.join(HOT_KEYWORDS_DIR, "keybert_hot_keywords.json")
 
-# Global variables
+# === Global State ===
 df = None
 bm25_model = None
 transformer_index = None
 spacy_index = None
-
-# Cache for hot keywords lookup: {method: {article_id: [keywords]}}
 hot_keywords_cache = {}
 
 
 def initialize_models():
-    """Initialize all models, pre-compute and cache hot keywords."""
+    """Initialize all models and pre-compute hot keywords."""
     global df, bm25_model, transformer_index, spacy_index, hot_keywords_cache
 
     logger.info("Initializing models and pre-computing hot keywords...")
@@ -53,32 +50,30 @@ def initialize_models():
     # Load BM25
     bm25_model, _ = build_bm25(df, "text", BM25_CORPUS_PATH, BM25_MODEL_PATH)
 
-    # Load Transformer embeddings and FAISS
+    # Load Transformer + FAISS
     transformer_embeddings = compute_transformer_doc_vectors(df, "text", TRANSFORMER_EMBEDDINGS_PATH)
     transformer_index = build_or_load_faiss_index(FAISS_TRANSFORMER_INDEX_PATH, transformer_embeddings)
 
-    # Load spaCy embeddings and FAISS
+    # Load spaCy + FAISS
     spacy_embeddings = compute_spacy_doc_vectors(df, "text", SPACY_EMBEDDINGS_PATH)
     spacy_index = build_or_load_faiss_index(FAISS_SPACY_INDEX_PATH, spacy_embeddings)
 
-    # --- PRE-COMPUTE HOT KEYWORDS (ONLY ONCE) ---
+    # Pre-compute hot keywords
     os.makedirs(HOT_KEYWORDS_DIR, exist_ok=True)
 
-    # YAKE
     if not os.path.exists(YAKE_OUTPUT_PATH):
-        logger.info(f"Pre-computing YAKE hot keywords → {YAKE_OUTPUT_PATH}")
+        logger.info(f"Pre-computing YAKE hot keywords to {YAKE_OUTPUT_PATH}")
         extract_hot_keywords_yake(ARTICLES_PATH, YAKE_OUTPUT_PATH)
     else:
-        logger.info(f"YAKE hot keywords already exist at {YAKE_OUTPUT_PATH}")
+        logger.info(f"YAKE keywords exist: {YAKE_OUTPUT_PATH}")
 
-    # KeyBERT
     if not os.path.exists(KEYBERT_OUTPUT_PATH):
-        logger.info(f"Pre-computing KeyBERT hot keywords → {KEYBERT_OUTPUT_PATH}")
+        logger.info(f"Pre-computing KeyBERT hot keywords to {KEYBERT_OUTPUT_PATH}")
         extract_hot_keywords_keybert(ARTICLES_PATH, KEYBERT_OUTPUT_PATH)
     else:
-        logger.info(f"KeyBERT hot keywords already exist at {KEYBERT_OUTPUT_PATH}")
+        logger.info(f"KeyBERT keywords exist: {KEYBERT_OUTPUT_PATH}")
 
-    # --- LOAD HOT KEYWORDS INTO MEMORY ---
+    # Load into memory
     def load_keywords_from_file(file_path):
         df_kw = pd.read_json(file_path)
         return dict(zip(df_kw["id"], df_kw["hot_keywords"]))
@@ -86,33 +81,40 @@ def initialize_models():
     hot_keywords_cache["YAKE"] = load_keywords_from_file(YAKE_OUTPUT_PATH)
     hot_keywords_cache["KeyBERT"] = load_keywords_from_file(KEYBERT_OUTPUT_PATH)
 
-    logger.info("Hot keywords pre-loaded into memory for fast lookup.")
+    logger.info("Hot keywords pre-loaded into memory.")
     logger.info("All models initialized successfully!")
 
 
 def search_and_display(query, hot_keyword_method, search_method):
-    """Perform search and display results using pre-computed hot keywords."""
+    """
+    Perform search and render results with hot keywords.
+
+    Args:
+        query (str): User query.
+        hot_keyword_method (str): "YAKE" or "KeyBERT".
+        search_method (str): Search backend.
+
+    Returns:
+        str: HTML-formatted results.
+    """
     if not query or not query.strip():
         return "<p style='text-align: center; color: var(--color-accent);'>Warning: Please enter a search query.</p>"
 
     try:
         logger.info(f"Query: '{query}' | Keywords: {hot_keyword_method} | Search: {search_method}")
 
-        # Perform search
         if search_method == "Lexical Search":
             results = search_articles_bm25(query, df, bm25_model, top_n=5)
         elif search_method == "Spacy Search":
             results = search_articles_spacy(query, df, spacy_index, top_n=5)
-        else:  # Semantic Search
+        else:
             results = search_articles_semantic(query, df, transformer_index, top_n=5)
 
         if not results:
             return "<p style='text-align: center;'>No results found.</p>"
 
-        # Get pre-computed keywords for this method
         kw_lookup = hot_keywords_cache.get(hot_keyword_method, {})
 
-        # Build HTML
         html = f"""
         <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border-color-primary);">
             <h2 style="margin: 0 0 8px 0;">Search: {query}</h2>
@@ -126,8 +128,6 @@ def search_and_display(query, hot_keyword_method, search_method):
             rank = result["rank"]
             article_id = result["id"]
             text = result["text"]
-
-            # Get pre-computed keywords
             keywords = kw_lookup.get(article_id, [])
             keywords_str = ", ".join(keywords) if keywords else "No keywords"
 
@@ -161,7 +161,7 @@ def search_and_display(query, hot_keyword_method, search_method):
 
 
 def create_interface():
-    """Create Gradio interface."""
+    """Build and return the Gradio interface."""
     theme = gr.themes.Soft(
         primary_hue="blue",
         secondary_hue="slate",

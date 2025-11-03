@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from src.config import load_config
 
-config= load_config()
+config = load_config()
 
 LOG_DIR = Path(config['logging']['dir'])
 LOG_DIR.mkdir(exist_ok=True)
@@ -11,7 +11,10 @@ LOG_DIR.mkdir(exist_ok=True)
 
 def setup_logger() -> logging.Logger:
     """
-    Create a new timestamped log file and return a configured logger.
+    Create a new timestamped log file and configure a logger.
+
+    Returns:
+        logging.Logger: Configured logger instance.
     """
     logger = logging.getLogger("app_logger")
     logger.setLevel(config['logging']['level'])
@@ -29,14 +32,17 @@ def setup_logger() -> logging.Logger:
     logger.addHandler(fh)
 
     logger.propagate = False
-    logger.info(f"Logger initialized → {log_file}")
+    logger.info(f"Logger initialized to {log_file}")
 
     return logger
 
 
 def load_logger() -> logging.Logger:
     """
-    Load the latest existing log file. If none exist, create a new one.
+    Load the most recent log file. If none exist, create a new one.
+
+    Returns:
+        logging.Logger: Resumed or newly created logger.
     """
     log_files = sorted(LOG_DIR.glob("app_*.log"), key=lambda f: f.stat().st_mtime, reverse=True)
     if not log_files:

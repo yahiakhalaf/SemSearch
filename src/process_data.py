@@ -40,10 +40,10 @@ for category in os.listdir(base_dir):
             except Exception as e:
                 logger.warning(f"Failed to read {file_path}: {e}")
 
+# Create DataFrame and save
 df = pd.DataFrame(data)
 logger.info(f"Loaded {len(df)} articles across {df['category'].nunique()} categories.")
 
-# Save combined CSV
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 df.to_csv(output_path, index=False, encoding="utf-8")
 logger.info(f"Saved combined dataset to {output_path}")

@@ -5,9 +5,17 @@ from sklearn.metrics import ndcg_score
 
 def load_ground_truth(csv_path):
     """
-    Load ground truth data from a CSV.
+    Load ground truth relevance data from a CSV file.
+
+    Expected format:
+        query,id_1,id_2,...,id_5
+    where missing IDs are NaN.
+
+    Args:
+        csv_path (str): Path to the evaluation CSV.
+
     Returns:
-        dict: { query -> [relevant_doc_ids] }
+        dict: Mapping from query string to list of relevant document IDs (int).
     """
     df_eval = pd.read_csv(csv_path)
     ground_truth = {}
@@ -24,7 +32,17 @@ def load_ground_truth(csv_path):
 
 
 def precision_at_k(retrieved_ids, relevant_ids, k=5):
-    """Compute Precision@K"""
+    """
+    Compute Precision@K.
+
+    Args:
+        retrieved_ids (list): Ordered list of retrieved document IDs.
+        relevant_ids (list): List of relevant document IDs.
+        k (int): Cut-off rank.
+
+    Returns:
+        float: Precision@K.
+    """
     if not retrieved_ids:
         return 0.0
 
@@ -35,10 +53,23 @@ def precision_at_k(retrieved_ids, relevant_ids, k=5):
 
 
 def ndcg_at_k(retrieved_ids, relevant_ids, k=5):
-    """Compute Normalized Discounted Cumulative Gain (NDCG@K)"""
+    """
+    Compute Normalized Discounted Cumulative Gain (NDCG@K).
+
+    Uses ideal ranking where relevance decreases with position in `relevant_ids`.
+
+    Args:
+        retrieved_ids (list): Ordered list of retrieved document IDs.
+        relevant_ids (list): List of relevant document IDs (in ideal order).
+        k (int): Cut-off rank.
+
+    Returns:
+        float: NDCG@K score.
+    """
     if not retrieved_ids or not relevant_ids:
         return 0.0
 
+    # Ideal relevance: higher rank = higher relevance
     relevance_map = {doc_id: len(relevant_ids) - i for i, doc_id in enumerate(relevant_ids)}
     retrieved_k = retrieved_ids[:k]
     y_true = np.array([[relevance_map.get(doc_id, 0) for doc_id in retrieved_k]])
@@ -51,7 +82,16 @@ def ndcg_at_k(retrieved_ids, relevant_ids, k=5):
 
 
 def average_precision(retrieved_ids, relevant_ids):
-    """Compute Average Precision (AP)"""
+    """
+    Compute Average Precision (AP) for a single query.
+
+    Args:
+        retrieved_ids (list): Ordered list of retrieved document IDs.
+        relevant_ids (list): List of relevant document IDs.
+
+    Returns:
+        float: Average Precision.
+    """
     if not relevant_ids:
         return 0.0
 

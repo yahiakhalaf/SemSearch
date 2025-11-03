@@ -10,13 +10,21 @@ from src.config import load_config
 config = load_config()
 logger = load_logger()
 
-# Load SentenceTransformer model
+# Load SentenceTransformer model (shared across calls)
 embedder = SentenceTransformer(config['models']['transformer']['model_name'])
 
 
 def compute_transformer_doc_vectors(df, text_col, save_path=None):
     """
-    Compute and cache SentenceTransformer embeddings for each document.
+    Compute and cache SentenceTransformer embeddings for all documents.
+
+    Args:
+        df (pd.DataFrame): DataFrame with article text.
+        text_col (str): Column name containing article text.
+        save_path (str, optional): Path to cache embeddings. Defaults to config.
+
+    Returns:
+        np.ndarray: Embedding matrix (N_docs x dim).
     """
     save_path = save_path or config['models']['transformer']['embeddings_path']
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -35,15 +43,22 @@ def compute_transformer_doc_vectors(df, text_col, save_path=None):
 
 def search_articles_semantic(query, df, index, top_n=5):
     """
-    Perform semantic search using SentenceTransformer embeddings + FAISS.
-    Returns top N results as JSON with rank.
+    Perform semantic search using transformer embeddings and FAISS.
+
+    Args:
+        query (str): User search query.
+        df (pd.DataFrame): Article dataset.
+        index (faiss.Index): Pre-built FAISS index (inner product).
+        top_n (int): Number of results to return.
+
+    Returns:
+        list[dict]: Top-N results with rank, id, category, similarity, and text.
     """
     try:
         logger.info(f"Running semantic search for query: '{query}'")
 
         query = clean_text(query)
         query_vec = embedder.encode([query], convert_to_numpy=True).astype("float32")
-        # Normalize vector
         faiss.normalize_L2(query_vec)
 
         distances, indices = index.search(query_vec, top_n)
