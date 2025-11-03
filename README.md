@@ -56,10 +56,16 @@ git clone https://github.com/yahiakhalaf/SemSearch.git
 cd SemSearch
 ```
 
-2. Install uv if you haven't already:
+2. Create a virtual environment and install uv locally:
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-# On Windows: powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+python -m venv .venv
+# Activate the virtual environment
+# On macOS/Linux:
+source .venv/bin/activate
+# On Windows:
+.venv\Scripts\activate
+
+pip install uv
 ```
 
 3. Sync dependencies and create virtual environment:
@@ -160,8 +166,8 @@ data:
 # Model paths
 models:
   bm25:
-    corpus_path: "data/embeddings/bm25_corpus.pkl"
-    model_path: "data/embeddings/bm25_model.pkl"
+    corpus_path: "models/bm25_corpus.pkl"
+    model_path: "models/bm25_model.pkl"
   
   transformer:
     embeddings_path: "data/embeddings/transformer_embeddings.npy"
@@ -204,6 +210,7 @@ interface:
 logging:
   dir: "logs"
   level: "INFO"
+
 
 ```
 
@@ -284,3 +291,4 @@ This project is licensed under the MIT License.
 ---
 
 **Built with ❤️ using Python, spaCy, and SentenceTransformers**
+
